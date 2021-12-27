@@ -1,7 +1,11 @@
 package com.pjrc.junitmockito.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class FruityviceDto {
 	public String genus;
@@ -9,5 +13,5 @@ public class FruityviceDto {
     public int id;
     public String family;
     public String order;
-    public Nutritions nutritions;
+    public NutritionsDto nutritions;
 }

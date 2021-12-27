@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pjrc.junitmockito.dto.FruityviceDto;
-import com.pjrc.junitmockito.dto.Nutritions;
+import com.pjrc.junitmockito.dto.NutritionsDto;
 
 @Service
 public class FruityviceService {
@@ -24,7 +24,7 @@ public class FruityviceService {
 					Double numNutritions = 0.0;
 					try {
 						response = new ObjectMapper().readValue(strResponse, FruityviceDto.class);
-						Nutritions nutritions = response.nutritions;
+						NutritionsDto nutritions = response.nutritions;
 						numNutritions = nutritions.getFat() +
 								nutritions.getCalories() +
 								nutritions.getCarbohydrates() + 
