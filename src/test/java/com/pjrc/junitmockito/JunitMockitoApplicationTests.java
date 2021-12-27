@@ -1,14 +1,19 @@
 package com.pjrc.junitmockito;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import com.pjrc.junitmockito.dto.FruityviceDto;
 import com.pjrc.junitmockito.dto.NutritionsDto;
@@ -22,15 +27,16 @@ class JunitMockitoApplicationTests {
 	
 	@BeforeEach
 	public void setUp() {
-		
+		// Se ejecuta antes que todos los test
 	}
 	
 	@AfterEach
 	public void tearDown() {
-		
+		// Se ejecuta después de todos los test
 	}
 	
 	@Test
+	@DisplayName("Método para validar que lo que obtenemos no es null") // Para ponerle nombre/descripción a los test
 	public void fruitNotNull() {
 		assertNotNull(fruityviceService.getFruityvice("banana"), "Fruityvice must be not null");
 	}
@@ -46,8 +52,14 @@ class JunitMockitoApplicationTests {
 	}
 	
 	@Test
+	public void numNutritionsExpectedExceptionEquals() {
+		assertThrows(WebClientResponseException.class, () -> fruityviceService.getNumNutritions("ban"), "No existe la fruta ban");
+	}
+	
+	@Test
 	public void fruitAssertEqual() {
-		// Por buenas prácticas solo recomiendan un assert por método. Ya que si el primer método no pasa el test, saldría de la función
+		// Por buenas prácticas solo recomiendan un assert por método. Ya que si el primer método no pasa el test, saldría de la función.
+		// Si necesitas tener varios assert en un mismo método y evitar lo anterior, puedes usar el assertAll. 
 		
 		// 1. SetUp
 		NutritionsDto nutritions = new NutritionsDto(22, 1, 0.2, 96, 17.2);
@@ -70,9 +82,17 @@ class JunitMockitoApplicationTests {
 		assertEquals(fruityvice.getNutritions().getSugar(), fruityviceResult.getNutritions().getSugar());
 		
 		assertNotSame(fruityvice, fruityviceResult);
+		
+		// Ejemplo de assertAll
+		assertAll(
+				()-> assertEquals(fruityvice.getGenus(), fruityviceResult.getGenus()),
+				()-> assertEquals(fruityvice.getId(), fruityviceResult.getId()),
+				()-> assertEquals(fruityvice.getName(), fruityviceResult.getName())
+		);
 	}
 
 	@Test
+	@Disabled("Se ha deshabilitado este test como prueba de la etiqueta") // Es útil por si el método a testear tiene un bug.
 	void contextLoads() {
 	}
 
