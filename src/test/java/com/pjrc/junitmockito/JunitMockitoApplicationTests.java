@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 
+import java.time.Duration;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterAll;
@@ -129,5 +131,11 @@ class JunitMockitoApplicationTests {
 				);
 	}
 	
-
+	
+	// TimeOut en Test
+	@Test
+	public void timeOutTest() {
+		assertTimeout(Duration.ofMillis(500), () -> fruityviceService.longTaskOperation());
+	}
+	
 }

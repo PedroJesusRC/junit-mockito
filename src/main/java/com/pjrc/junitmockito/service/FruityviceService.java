@@ -61,4 +61,11 @@ public class FruityviceService {
                 .build();
 		return webClient;
 	}
+	
+	public void longTaskOperation() {
+		try {
+			Thread.sleep(1000);
+		} catch (Exception e) {
+		}
+	}
 }
