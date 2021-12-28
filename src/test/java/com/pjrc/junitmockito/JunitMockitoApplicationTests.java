@@ -6,11 +6,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -25,14 +32,24 @@ class JunitMockitoApplicationTests {
 	@Autowired
 	FruityviceService fruityviceService;
 	
+	@BeforeAll
+	public static void beforeAllTests() {
+		// Se ejecuta solo una vez y antes de que todos los test se hayan ejecutado.
+	}
+	
+	@AfterAll
+	public static void afterAlltests() {
+		// Se ejecutar solo una vez y después de que todos los test se hayan ejecutado.
+	}
+	
 	@BeforeEach
 	public void setUp() {
-		// Se ejecuta antes que todos los test
+		// Se ejecuta antes de cada test.
 	}
 	
 	@AfterEach
 	public void tearDown() {
-		// Se ejecuta después de todos los test
+		// Se ejecuta después de cada test.
 	}
 	
 	@Test
@@ -95,5 +112,22 @@ class JunitMockitoApplicationTests {
 	@Disabled("Se ha deshabilitado este test como prueba de la etiqueta") // Es útil por si el método a testear tiene un bug.
 	void contextLoads() {
 	}
+	
+	// Test Parametrizados.
+	@ParameterizedTest(name = "{index} => a={0}, b={1}, sum={2}")
+	@MethodSource("addProviderData")
+	public void addParameterizedTest(int a, int b, int sum) {
+		assertEquals(sum, a+b);
+	}
+	
+	private static Stream<Arguments> addProviderData(){
+		// Esto nos lo podríamos traer de una fuente de datos como una BD
+		return Stream.of(
+				Arguments.of(6,2,8),
+				Arguments.of(-6,-2,-8),
+				Arguments.of(6,-2,4)
+				);
+	}
+	
 
 }
